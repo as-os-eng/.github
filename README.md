@@ -75,6 +75,25 @@ claim, a status *check*.
   memory, and customization behind a single URL — with Claude-style artifacts
   captured automatically from what personas produce.
 
+### What "current hardware" actually is — an MVP, not the target
+
+The single-GPU consumer hardware (GTX 970, 4GB VRAM) everything above runs on
+is deliberately framed as an **MVP**: proof that the architecture works, on
+the cheapest hardware that could prove it — not the system's baseline design
+being incrementally patched. The real end-goal hardware is an **NVIDIA DGX
+Spark** (128GB unified CPU/GPU memory, GB10 Grace Blackwell Superchip,
+shipping since Oct 2025, $4,699 Founders Edition as of Feb 2026) — a
+structurally different memory architecture that removes the current "one
+model resident in VRAM" ceiling, trading it for a different bottleneck
+(273 GB/s shared-memory bandwidth; independent benchmarking puts large-model
+throughput ~4× slower than a datacenter GPU on the same workload — NVIDIA's
+own marketing claims and that independent benchmark genuinely disagree, and
+this document doesn't pick a side). A planned RTX 5060 Ti 16GB upgrade is an
+**interim waypoint** on the way there, not itself the destination. The
+operating principle: **on any GPU upgrade, the full system architecture
+scales with it** — not just inference gets faster on an unchanged design.
+Full detail: `as-os-sp/docs/HARDWARE_ROADMAP.md`.
+
 ### In progress / pending
 
 - **Extending confidence-gated routing** from six personas to a genuine
@@ -83,9 +102,11 @@ claim, a status *check*.
   actual difficulty, not by static persona assignment.
 - **Local-model training / distillation** — proposed, not started. No training
   compute path is confirmed yet; the current GPU is inference-only capacity.
-- **The GPU upgrade** (RTX 5060 Ti 16GB) — documented, not executed. This is the
-  hard ceiling on real local concurrency: one model resident in VRAM at a time,
-  full stop, regardless of how good routing policy or local models get.
+- **The interim GPU upgrade** (RTX 5060 Ti 16GB) — documented, not executed;
+  the real end-goal (DGX Spark) is further out and not yet purchased either.
+  Until either lands, one model resident in VRAM at a time is a hard ceiling
+  on local concurrency, regardless of how good routing policy or local models
+  get — see "What 'current hardware' actually is" above.
 - **One unresolved routing gap** — a persona needing both real tool reliability
   and strong Bangla has no fully-verified route yet; the one route in the fleet
   verified for both is temporarily blocked by a third-party credit limit, expected
